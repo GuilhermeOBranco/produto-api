@@ -1,6 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from fastapi import status
+from schema.response.APIResponse import APIResponse
 from service.produto_service import ProdutoService, get_produto_service
 
 from schema.request.cadastro_produto_schema_request import ProdutoRequestSchema
@@ -12,7 +13,7 @@ router: APIRouter = APIRouter()
 @router.post(
     "/cadastrar-produto",
     status_code=status.HTTP_201_CREATED,
-    response_model=ProdutoRequestSchema,
+    response_model=APIResponse[ProdutoRequestSchema],
 )
 async def inserir_produto(
     produto: ProdutoRequestSchema,
@@ -20,7 +21,9 @@ async def inserir_produto(
 ):
     try:
         service.inserir_produto(produto)
-        return produto
+        return APIResponse(
+            sucesso=True, mensagem="Dado inserido com sucesso", data=produto
+        )
     except Exception as ex:
         print(ex)
         return status.HTTP_500_INTERNAL_SERVER_ERROR
