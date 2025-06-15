@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.endpoint.produto import router as produto_router
+from endpoint.produto import router as produto_router
 import uvicorn
 
 
